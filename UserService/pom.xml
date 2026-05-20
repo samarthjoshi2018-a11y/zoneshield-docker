@@ -11,8 +11,8 @@
 	<groupId>com.example</groupId>
 	<artifactId>UserService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
+	<name>UserService</name>
+	<description>User Service Microservice</description>
 	<url/>
 	<licenses>
 		<license/>
