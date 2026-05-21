@@ -6,17 +6,20 @@ services:
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: samaRth7
-      MYSQL_DATABASE: geofence   # ← ADD THIS
+      MYSQL_DATABASE: geofence   
+      MYSQL_ROOT_HOST: "%"  
     ports:
       - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
   
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-psamaRth7"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
   kafka:
     image: apache/kafka:4.2.0
     container_name: kafka
@@ -44,9 +47,12 @@ services:
     healthcheck:
       test: ["CMD", "bash", "-c", "echo > /dev/tcp/localhost/9092"]
       interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 40s
+      timeout: 15s
+      retries: 3
+      start_period: 140s
+
+    volumes:
+      - kafka-data:/tmp/kraft-combined-logs
 
   service-registry:
     build: ./ServiceRegistry
@@ -57,9 +63,9 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
       interval: 10s
-      timeout: 5s
-      retries: 30
-      start_period: 90s
+      timeout: 15s
+      retries: 10
+      start_period: 50s
     
 
   api-gateway:
@@ -77,10 +83,10 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 10
-      start_period: 60s
+      interval: 35s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
     restart: unless-stopped
 
 
@@ -100,6 +106,8 @@ services:
 
       service-registry:
         condition: service_healthy
+      api-gateway:
+        condition: service_healthy
 
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/geofence
@@ -114,7 +122,7 @@ services:
       interval: 15s
       timeout: 5s
       retries: 10
-      start_period: 60s
+      start_period: 140s
 
   auth-service:
     ports:
@@ -127,6 +135,8 @@ services:
         condition: service_healthy
 
       kafka:
+        condition: service_healthy
+      api-gateway:
         condition: service_healthy
 
       service-registry:
@@ -143,11 +153,11 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-registry:8761/eureka
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 10
-      start_period: 60s
+        test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
+        interval: 15s
+        timeout: 15s
+        retries: 10
+        start_period: 140s
 
   email-service:
     build: ./emailService
@@ -156,6 +166,8 @@ services:
       - "8084:8084"
     depends_on:
       kafka:
+        condition: service_healthy
+      api-gateway:
         condition: service_healthy
 
       service-registry:
@@ -172,8 +184,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8084/actuator/health"]
       interval: 15s
       timeout: 5s
-      retries: 10
-      start_period: 60s
+      retries: 6
+      start_period: 160s
   frontend:
     build: ./React_tutorial/myapp
     container_name: frontend
@@ -188,3 +200,6 @@ services:
     environment:
       VITE_API_URL: http://localhost:8080
 
+volumes:
+  mysql-data:
+  kafka-data:

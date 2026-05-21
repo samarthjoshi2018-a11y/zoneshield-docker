@@ -16,7 +16,7 @@ public class SecurityConfig {
             .formLogin(formLogin -> formLogin.disable())
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/userinfo/**").permitAll()
+                .requestMatchers("/userinfo/**","/actuator/health","/actuator/**").permitAll()
                 .anyRequest().authenticated()
             );  
 

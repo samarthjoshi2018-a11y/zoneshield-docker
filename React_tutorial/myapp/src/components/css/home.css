@@ -159,9 +159,9 @@
 .login-form {
   width: 520px;             
   padding: 55px 30px;           
-  background: #ffffff;
+  background: #4aa7cc;
   border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(17, 17, 17, 0.08);
   text-align: center;
 }
 
@@ -186,7 +186,7 @@
 /* Button */
 .btn-primary {
   margin-top: 8px;
-  padding: 8px;                  /* ⬅️ shorter button */
+  padding: 8px;                  
   font-size: 14px;
   border-radius: 8px;
 }
