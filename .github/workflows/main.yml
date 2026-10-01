@@ -47,7 +47,7 @@ jobs:
       - name: Build and Push Email Service
         uses: docker/build-push-action@v7
         with:
-          context: ./EmailService
+          context: ./emailService
           push: true
           tags: samarth20182004/email-service:latest
 
