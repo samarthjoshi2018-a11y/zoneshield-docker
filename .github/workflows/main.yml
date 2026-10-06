@@ -1,0 +1,146 @@
+name: ZoneShield CI/CD pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and Push Frontend
+        uses: docker/build-push-action@v7
+        with:
+          context: ./React_tutorial/myapp
+          push: true
+          tags: samarth20182004/zoneshield-frontend:latest
+
+      - name: Set up JDK 21 for AuthService
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          
+      - name: Make Maven Wrapper executable
+        working-directory: ./AuthService
+        run: chmod +x mvnw
+        
+      - name: Build AuthService
+        working-directory: ./AuthService
+        run: ./mvnw clean package 
+        
+      
+      - name: Build and Push Auth Service
+        uses: docker/build-push-action@v7
+        with:
+          context: ./AuthService
+          push: true
+          tags: samarth20182004/auth-service:latest
+          
+
+      - name: Set up JDK 21 for UserService
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Make UserService Maven Wrapper executable
+        working-directory: ./UserService
+        run: chmod +x mvnw
+
+      - name: Build UserService
+        working-directory: ./UserService
+        run: ./mvnw clean package 
+
+      - name: Build and Push User Service
+        uses: docker/build-push-action@v7
+        with:
+          context: ./UserService
+          push: true
+          tags: samarth20182004/user-service:latest
+          
+
+      - name: Set up JDK 21 for EmailService
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Make EmailService Maven Wrapper executable
+        working-directory: ./emailService
+        run: chmod +x mvnw
+
+      - name: Build EmailService
+        working-directory: ./emailService
+        run: ./mvnw clean package 
+
+      - name: Build and Push Email Service
+        uses: docker/build-push-action@v7
+        with:
+          context: ./emailService
+          push: true
+          tags: samarth20182004/email-service:latest
+          
+
+      - name: Set up JDK 17 for ApiGateway
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Make ApiGateway Maven Wrapper executable
+        working-directory: ./ApiGateway
+        run: chmod +x mvnw
+
+      - name: Build ApiGateway
+        working-directory: ./ApiGateway
+        run: ./mvnw clean package 
+
+      - name: Build and Push API Gateway
+        uses: docker/build-push-action@v7
+        with:
+          context: ./ApiGateway
+          push: true
+          tags: samarth20182004/api-gateway:latest
+
+      
+      - name: Set up JDK 25 for ServiceRegistry
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Make ServiceRegistry Maven Wrapper executable
+        working-directory: ./ServiceRegistry
+        run: chmod +x mvnw
+
+      - name: Build ServiceRegistry
+        working-directory: ./ServiceRegistry
+        run: ./mvnw clean package 
+
+      - name: Build and Push Service Registry
+        uses: docker/build-push-action@v7
+        with:
+          context: ./ServiceRegistry
+          push: true
+          tags: samarth20182004/service-registry:latest
