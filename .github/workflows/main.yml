@@ -43,7 +43,7 @@ jobs:
         
       - name: Build AuthService
         working-directory: ./AuthService
-        run: ./mvnw clean package -DskipTests
+        run: ./mvnw clean package 
         
       
       - name: Build and Push Auth Service
@@ -67,7 +67,7 @@ jobs:
 
       - name: Build UserService
         working-directory: ./UserService
-        run: ./mvnw clean package -DskipTests
+        run: ./mvnw clean package 
 
       - name: Build and Push User Service
         uses: docker/build-push-action@v7
@@ -90,7 +90,7 @@ jobs:
 
       - name: Build EmailService
         working-directory: ./emailService
-        run: ./mvnw clean package -DskipTests
+        run: ./mvnw clean package 
 
       - name: Build and Push Email Service
         uses: docker/build-push-action@v7
@@ -113,7 +113,7 @@ jobs:
 
       - name: Build ApiGateway
         working-directory: ./ApiGateway
-        run: ./mvnw clean package -DskipTests
+        run: ./mvnw clean package 
 
       - name: Build and Push API Gateway
         uses: docker/build-push-action@v7
@@ -136,7 +136,7 @@ jobs:
 
       - name: Build ServiceRegistry
         working-directory: ./ServiceRegistry
-        run: ./mvnw clean package -DskipTests
+        run: ./mvnw clean package 
 
       - name: Build and Push Service Registry
         uses: docker/build-push-action@v7
