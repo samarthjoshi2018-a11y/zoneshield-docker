@@ -36,11 +36,16 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-
+          
+      - name: Make Maven Wrapper executable
+        working-directory: ./AuthService
+        run: chmod +x mvnw
+        
       - name: Build AuthService
         working-directory: ./AuthService
         run: ./mvnw clean package -DskipTests
-
+        
+      
       - name: Build and Push Auth Service
         uses: docker/build-push-action@v7
         with:
