@@ -39,7 +39,7 @@ public class UserService {
 
     public  ResponseEntity<?> setService(serviceDetails sd) {
         sd.setEmail(sd.getEmail());
-        System.out.println("Setting service for email: " + sd.getEmail());
+        // System.out.println("Setting service for email: " + sd.getEmail());
         sd.setStartDate(LocalDate.now());
         sd.setEndDate(LocalDate.now().plusDays(30));
         srepo.save(sd);        
