@@ -30,12 +30,24 @@ jobs:
           push: true
           tags: samarth20182004/zoneshield-frontend:latest
 
+      - name: Set up JDK 21 for AuthService
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build AuthService
+        working-directory: ./AuthService
+        run: ./mvnw clean package -DskipTests
+
       - name: Build and Push Auth Service
         uses: docker/build-push-action@v7
         with:
           context: ./AuthService
           push: true
           tags: samarth20182004/auth-service:latest
+          
 
       - name: Build and Push User Service
         uses: docker/build-push-action@v7
