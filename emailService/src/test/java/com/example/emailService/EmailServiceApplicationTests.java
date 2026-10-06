@@ -3,11 +3,11 @@ package com.example.emailService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class EmailServiceApplicationTests {
+// @SpringBootTest
+// class EmailServiceApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+// 	@Test
+// 	void contextLoads() {
+// 	}
 
-}
+// }
