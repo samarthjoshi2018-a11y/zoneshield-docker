@@ -54,12 +54,43 @@ jobs:
           tags: samarth20182004/auth-service:latest
           
 
+      - name: Set up JDK 21 for UserService
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Make UserService Maven Wrapper executable
+        working-directory: ./UserService
+        run: chmod +x mvnw
+
+      - name: Build UserService
+        working-directory: ./UserService
+        run: ./mvnw clean package -DskipTests
+
       - name: Build and Push User Service
         uses: docker/build-push-action@v7
         with:
           context: ./UserService
           push: true
           tags: samarth20182004/user-service:latest
+          
+
+      - name: Set up JDK 21 for EmailService
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Make EmailService Maven Wrapper executable
+        working-directory: ./emailService
+        run: chmod +x mvnw
+
+      - name: Build EmailService
+        working-directory: ./emailService
+        run: ./mvnw clean package -DskipTests
 
       - name: Build and Push Email Service
         uses: docker/build-push-action@v7
@@ -67,6 +98,22 @@ jobs:
           context: ./emailService
           push: true
           tags: samarth20182004/email-service:latest
+          
+
+      - name: Set up JDK 17 for ApiGateway
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Make ApiGateway Maven Wrapper executable
+        working-directory: ./ApiGateway
+        run: chmod +x mvnw
+
+      - name: Build ApiGateway
+        working-directory: ./ApiGateway
+        run: ./mvnw clean package -DskipTests
 
       - name: Build and Push API Gateway
         uses: docker/build-push-action@v7
@@ -74,6 +121,22 @@ jobs:
           context: ./ApiGateway
           push: true
           tags: samarth20182004/api-gateway:latest
+
+      
+      - name: Set up JDK 25 for ServiceRegistry
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Make ServiceRegistry Maven Wrapper executable
+        working-directory: ./ServiceRegistry
+        run: chmod +x mvnw
+
+      - name: Build ServiceRegistry
+        working-directory: ./ServiceRegistry
+        run: ./mvnw clean package -DskipTests
 
       - name: Build and Push Service Registry
         uses: docker/build-push-action@v7
